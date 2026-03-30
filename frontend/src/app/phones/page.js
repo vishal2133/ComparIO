@@ -1,167 +1,163 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
 
-const BRANDS = ['All', 'Apple', 'Samsung', 'OnePlus', 'Xiaomi', 'Realme', 'Vivo', 'iQOO', 'Nothing', 'Google'];
+const BRANDS = ['All', 'Apple', 'Samsung', 'OnePlus', 'Xiaomi', 'Realme', 'Nothing', 'iQOO', 'Vivo', 'Google', 'Oppo', 'Motorola', 'Poco'];
+const OS_OPTIONS = ['All', 'Android', 'iOS'];
+const SORT_OPTIONS = [
+  { label: 'Default', value: 'default' },
+  { label: 'Price: Low → High', value: 'price-asc' },
+  { label: 'Price: High → Low', value: 'price-desc' },
+  { label: 'Name: A–Z', value: 'name' },
+];
+const BUDGET_RANGES = [
+  { label: 'All budgets', value: '' },
+  { label: 'Under ₹15K', value: '15000' },
+  { label: 'Under ₹30K', value: '30000' },
+  { label: 'Under ₹60K', value: '60000' },
+  { label: 'Under ₹1L', value: '100000' },
+];
 
 function PhonesContent() {
   const searchParams = useSearchParams();
   const [phones, setPhones] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeBrand, setActiveBrand] = useState(searchParams.get('brand') || 'All');
+  const [activeOs, setActiveOs] = useState('All');
   const [sort, setSort] = useState('default');
   const [search, setSearch] = useState(searchParams.get('q') || '');
+  const [budgetCap, setBudgetCap] = useState('');
 
   useEffect(() => {
-  setLoading(true);
-  const url = activeBrand && activeBrand !== 'All'
-    ? `${process.env.NEXT_PUBLIC_API_URL}/api/products?brand=${activeBrand}`
-    : `${process.env.NEXT_PUBLIC_API_URL}/api/products`;
+    setLoading(true);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products?category=phone`)
+      .then(r => r.json())
+      .then(d => { setPhones(d.data || []); setLoading(false); });
+  }, []);
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10000);
-
-  fetch(url, { signal: controller.signal })
-    .then((res) => res.json())
-    .then((data) => {
-      setPhones(data.data || []);
-      setLoading(false);
-      clearTimeout(timeout);
-    })
-    .catch((err) => {
-      if (err.name !== 'AbortError') console.error(err);
-      setLoading(false);
-      clearTimeout(timeout);
-    });
-
-  return () => { controller.abort(); clearTimeout(timeout); };
-}, [activeBrand]);
-
-  const getBestPrice = (prices) => Math.min(...prices.map((p) => p.price));
-  const formatPrice = (price) => '₹' + price.toLocaleString('en-IN');
+  const getBest = (prices) => Math.min(...prices.map(p => p.price));
+  const fmt = (p) => '₹' + p.toLocaleString('en-IN');
 
   const filtered = phones
-    .filter((p) => search
-      ? p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.brand.toLowerCase().includes(search.toLowerCase())
-      : true
-    )
+    .filter(p => activeBrand === 'All' || p.brand === activeBrand)
+    .filter(p => activeOs === 'All' || p.os?.toLowerCase() === activeOs.toLowerCase())
+    .filter(p => !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.brand.toLowerCase().includes(search.toLowerCase()))
+    .filter(p => !budgetCap || getBest(p.prices) <= parseInt(budgetCap))
     .sort((a, b) => {
-      if (sort === 'price-asc') return getBestPrice(a.prices) - getBestPrice(b.prices);
-      if (sort === 'price-desc') return getBestPrice(b.prices) - getBestPrice(a.prices);
+      if (sort === 'price-asc') return getBest(a.prices) - getBest(b.prices);
+      if (sort === 'price-desc') return getBest(b.prices) - getBest(a.prices);
       if (sort === 'name') return a.name.localeCompare(b.name);
       return 0;
     });
 
+  const clearAll = () => { setActiveBrand('All'); setActiveOs('All'); setSearch(''); setBudgetCap(''); };
+  const hasFilters = activeBrand !== 'All' || activeOs !== 'All' || search || budgetCap;
+
   return (
-    <main className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-6 py-10">
+    <main className="min-h-screen t-bg t-text">
+      <div className="max-w-7xl mx-auto px-6 py-10">
 
-        {/* PAGE HEADER */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-1">All Phones</h1>
-          <p className="text-gray-500 text-sm">Compare prices across Amazon & Flipkart</p>
+        {/* HEADER */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <div className="text-xs text-blue-400 font-bold uppercase tracking-widest mb-2">📱 Phones</div>
+            <h1 className="text-4xl font-black tracking-tight">Find your phone</h1>
+            <p className="t-text2 text-sm mt-1">Best prices across Amazon & Flipkart</p>
+          </div>
+          <Link href="/assistant"
+            className="hidden md:flex items-center gap-2 bg-blue-600/20 border border-blue-500/30 text-blue-300 font-bold px-4 py-2.5 rounded-xl text-sm hover:bg-blue-600/30 transition">
+            🤖 Help me choose
+          </Link>
         </div>
 
-        {/* FILTERS ROW */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
-          {/* SEARCH */}
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Filter by name..."
-            className="bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-400 flex-1"
-          />
-          {/* SORT */}
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-            className="bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none cursor-pointer"
-          >
-            <option value="default">Sort: Default</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
-            <option value="name">Name: A–Z</option>
-          </select>
+        {/* FILTERS */}
+        <div className="t-surface border t-border rounded-2xl p-5 mb-6">
+          {/* Top row */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+            <input type="text" value={search} onChange={e => setSearch(e.target.value)}
+              placeholder="Search phones..."
+              className="t-input border t-border rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-500/50 t-text placeholder-gray-600 col-span-2 md:col-span-1" />
+            <select value={budgetCap} onChange={e => setBudgetCap(e.target.value)}
+              className="t-input border t-border rounded-xl px-4 py-2.5 text-sm outline-none t-text cursor-pointer">
+              {BUDGET_RANGES.map(b => <option key={b.value} value={b.value} className="bg-gray-900">{b.label}</option>)}
+            </select>
+            <select value={activeOs} onChange={e => setActiveOs(e.target.value)}
+              className="t-input border t-border rounded-xl px-4 py-2.5 text-sm outline-none t-text cursor-pointer">
+              {OS_OPTIONS.map(o => <option key={o} value={o} className="bg-gray-900">{o === 'All' ? 'All OS' : o}</option>)}
+            </select>
+            <select value={sort} onChange={e => setSort(e.target.value)}
+              className="t-input border t-border rounded-xl px-4 py-2.5 text-sm outline-none t-text cursor-pointer">
+              {SORT_OPTIONS.map(s => <option key={s.value} value={s.value} className="bg-gray-900">{s.label}</option>)}
+            </select>
+          </div>
+
+          {/* Brand pills */}
+          <div className="flex gap-2 flex-wrap">
+            <span className="text-xs t-text2 font-bold self-center mr-1">Brand:</span>
+            {BRANDS.map(b => (
+              <button key={b} onClick={() => setActiveBrand(b)}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition ${activeBrand === b ? 'bg-blue-600 t-text' : 't-input text-gray-500 hover:t-text border t-border'}`}>
+                {b}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* BRAND FILTERS */}
-        <div className="flex gap-2 flex-wrap mb-8">
-          {BRANDS.map((brand) => (
-            <button
-              key={brand}
-              onClick={() => setActiveBrand(brand)}
-              className={`px-4 py-2 rounded-xl text-sm font-bold transition ${
-                activeBrand === brand
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white border border-gray-200 text-gray-600 hover:border-blue-300'
-              }`}
-            >
-              {brand}
+        {/* COUNT + CLEAR */}
+        <div className="text-xs t-text2 mb-5 font-bold flex items-center gap-3">
+          <span>{loading ? 'Loading...' : `${filtered.length} phones found`}</span>
+          {hasFilters && (
+            <button onClick={clearAll} className="text-blue-400 hover:text-blue-300 transition">
+              Clear filters ×
             </button>
-          ))}
+          )}
         </div>
 
-        {/* RESULTS COUNT */}
-        <div className="text-xs text-gray-400 mb-5 font-medium">
-          {loading ? 'Loading...' : `${filtered.length} phones found`}
-        </div>
-
-        {/* PHONES GRID */}
+        {/* GRID */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-gray-200 p-5 animate-pulse">
-                <div className="w-full h-36 bg-gray-100 rounded-xl mb-4" />
-                <div className="h-3 bg-gray-100 rounded mb-2 w-1/2" />
-                <div className="h-4 bg-gray-100 rounded mb-3 w-3/4" />
-                <div className="h-6 bg-gray-100 rounded w-1/3" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+            {[...Array(10)].map((_, i) => (
+              <div key={i} className="t-surface border t-border rounded-2xl p-5 animate-pulse">
+                <div className="h-36 t-input rounded-xl mb-4" />
+                <div className="h-3 t-input rounded mb-2 w-1/2" />
+                <div className="h-4 t-input rounded mb-3 w-3/4" />
+                <div className="h-5 t-input rounded w-1/3" />
               </div>
             ))}
           </div>
         ) : filtered.length === 0 ? (
-          <div className="text-center py-20 text-gray-400">
-            <div className="text-4xl mb-3">😕</div>
-            <div className="font-bold">No phones found</div>
+          <div className="text-center py-24">
+            <div className="text-4xl mb-3">📱</div>
+            <div className="font-bold text-gray-500">No phones found</div>
+            <button onClick={clearAll} className="mt-3 text-blue-400 text-sm hover:underline">Clear all filters</button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-            {filtered.map((phone) => {
-              const best = getBestPrice(phone.prices);
-              const bestPlatform = phone.prices.find((p) => p.price === best);
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+            {filtered.map(p => {
+              const bp = getBest(p.prices);
+              const bplatform = p.prices.find(pr => pr.price === bp);
               return (
-                <Link key={phone._id} href={`/product/${phone.slug}`}>
-                  <div className="bg-white rounded-2xl border border-gray-200 p-5 hover:shadow-lg hover:border-blue-200 transition cursor-pointer h-full flex flex-col">
-                    <img
-                      src={phone.image}
-                      alt={phone.name}
-                      className="w-full h-36 object-contain mb-4"
-                    />
-                    <div className="text-xs text-gray-400 font-medium mb-1">{phone.brand}</div>
-                    <div className="font-black text-gray-900 mb-1 text-sm leading-tight flex-1">
-                      {phone.name}
+                <Link key={p._id} href={`/product/${p.slug}`}>
+                  <div className="group t-surface border t-border rounded-2xl p-4 hover:bg-white/[0.07] hover:border-blue-500/30 transition-all h-full flex flex-col hover:scale-[1.02]">
+                    <div className="t-input rounded-xl p-3 mb-3 flex items-center justify-center h-32">
+                      <img src={p.image} alt={p.name} className="h-full object-contain" />
                     </div>
-                    {phone.storage?.length > 0 && (
-                      <div className="text-xs text-gray-400 mb-3">
-                        {phone.storage.join(' · ')}
-                      </div>
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <span className="text-xs t-text2">{p.brand}</span>
+                      {p.os && <span className="text-xs t-input t-text3 px-1.5 py-0.5 rounded-full text-[10px]">{p.os}</span>}
+                    </div>
+                    <div className="font-black t-text text-sm leading-tight mb-2 flex-1">{p.name}</div>
+                    {p.storage?.length > 0 && (
+                      <div className="text-[10px] t-text3 mb-2">{p.storage.slice(0, 2).join(' · ')}</div>
                     )}
-                    <div className="flex items-center justify-between mt-auto">
+                    <div className="flex items-center justify-between pt-2 border-t border-white/5">
                       <div>
-                        <div className="text-xs text-gray-400">Best price</div>
-                        <div className="text-lg font-black text-blue-600">
-                          {formatPrice(best)}
-                        </div>
+                        <div className="text-[10px] t-text3">Best price</div>
+                        <div className="text-base font-black text-blue-400">{fmt(bp)}</div>
                       </div>
-                      <span className={`text-xs font-bold px-2 py-1 rounded-lg capitalize ${
-                        bestPlatform?.platform === 'amazon'
-                          ? 'bg-yellow-100 text-yellow-700'
-                          : 'bg-blue-100 text-blue-700'
-                      }`}>
-                        {bestPlatform?.platform}
+                      <span className={`text-[10px] font-bold px-2 py-1 rounded-lg capitalize ${bplatform?.platform === 'amazon' ? 'bg-amber-500/10 text-amber-400' : 'bg-blue-500/10 text-blue-300'}`}>
+                        {bplatform?.platform}
                       </span>
                     </div>
                   </div>
@@ -176,9 +172,5 @@ function PhonesContent() {
 }
 
 export default function PhonesPage() {
-  return (
-    <Suspense>
-      <PhonesContent />
-    </Suspense>
-  );
+  return <Suspense><PhonesContent /></Suspense>;
 }
