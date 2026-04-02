@@ -251,8 +251,9 @@ export default function Navbar() {
                       <div className="text-[10px] truncate" style={{ color: 'var(--text3)' }}>{user.email}</div>
                     </div>
                     {[
-                      { href: '/profile', icon: '👤', label: 'My Profile' },
-                      { href: '/alerts', icon: '🔔', label: 'My Alerts' },
+                      { href: '/dashboard/profile', icon: '👤', label: 'My Profile' },
+                      { href: '/dashboard/alerts', icon: '🔔', label: 'My Alerts' },
+                      { href: '/dashboard/warranty', icon: '🛡️', label: 'Warranty' },
                     ].map(item => (
                       <Link key={item.href} href={item.href}
                         onClick={() => setMenuOpen(false)}
@@ -302,6 +303,10 @@ export default function Navbar() {
               { href: '/assistant', icon: '🤖', label: 'Assistant' },
               { href: '/contact', icon: '✉️', label: 'Contact' },
               { href: '/about', icon: 'ℹ️', label: 'About' },
+              { href: '/dashboard', icon: '🏠', label: 'Dashboard' },
+              { href: '/dashboard/profile', icon: '👤', label: 'My Profile' },
+              { href: '/dashboard/alerts', icon: '🔔', label: 'My Alerts' },
+              { href: '/dashboard/warranty', icon: '🛡️', label: 'Warranty' },
             ].map(item => (
               <Link key={item.href} href={item.href}
                 onClick={() => setMobileNav(false)}

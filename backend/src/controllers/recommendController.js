@@ -93,43 +93,65 @@ const getRecommendations = async (req, res) => {
 
 const generateClaudeSummary = async (products, userNeeds) => {
   try {
-    if (!process.env.CLAUDE_API_KEY) return null;
+    if (!process.env.GROQ_API_KEY) return null;
 
-    const productList = products
-      .map((p, i) => {
-        const price = '₹' + p.bestPrice.toLocaleString('en-IN');
-        return `${i + 1}. ${p.name} — ${price} on ${p.bestPlatform}`;
-      })
-      .join('\n');
+    const productList = products.map((p, i) => {
+      const scores = p.scores || {};
+      const topScores = Object.entries(scores)
+        .filter(([, v]) => v >= 8)
+        .map(([k]) => k)
+        .join(', ');
+      return `${i + 1}. ${p.name} — ₹${p.bestPrice.toLocaleString('en-IN')} on ${p.bestPlatform} (strengths: ${topScores || 'balanced'})`;
+    }).join('\n');
 
-    const prompt = `User needs a ${userNeeds.category} under ₹${Number(userNeeds.budget).toLocaleString('en-IN')}.
-Top priorities: ${userNeeds.priorities.join(', ')}.
-Usage: ${userNeeds.usage?.join(', ') || 'general'}.
+    const priorityMap = {
+      camera: 'great camera', battery: 'long battery life',
+      gaming: 'gaming performance', charging: 'fast charging',
+      display: 'display quality', performance: 'speed',
+      build: 'durability', portability: 'portability', value: 'value for money',
+    };
 
-Top 3 matches found:
+    const priorityText = (userNeeds.priorities || [])
+      .map(p => priorityMap[p] || p).join(' and ');
+
+    const prompt = `You are a sharp, friendly tech advisor helping an Indian customer pick the best ${userNeeds.category}.
+
+Customer profile:
+- Budget: up to ₹${Number(userNeeds.budget).toLocaleString('en-IN')}
+- Wants: ${priorityText || 'good overall value'}
+- Usage: ${userNeeds.usage?.join(', ') || 'general'}
+
+Top 3 matches:
 ${productList}
 
-Write a very brief 3-sentence shopping recommendation. Mention the top pick and why it fits. Be friendly and direct.`;
+Write exactly 2 sentences:
+1. State the #1 pick and why it fits this customer's specific needs.
+2. Mention the runner-up as a backup with one key reason.
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+Be direct. Use Indian context. No bullet points.`;
+
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': process.env.CLAUDE_API_KEY,
-        'anthropic-version': '2023-06-01',
+        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
+        model: 'llama-3.1-8b-instant',
         max_tokens: 150,
-        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7,
+        messages: [
+          { role: 'system', content: 'You are a concise, helpful tech advisor for Indian consumers.' },
+          { role: 'user', content: prompt },
+        ],
       }),
     });
 
     const data = await response.json();
-    return data.content?.[0]?.text || null;
+    return data.choices?.[0]?.message?.content?.trim() || null;
 
   } catch (err) {
-    console.log('Claude API skipped:', err.message);
+    console.log('Groq summary skipped:', err.message);
     return null;
   }
 };

@@ -607,6 +607,30 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Assistance Banner */}
+      <div className="max-w-6xl mx-auto px-6 mb-4">
+        <div className="flex items-center gap-4 px-5 py-3.5 rounded-2xl"
+          style={{
+            background: 'linear-gradient(135deg, rgba(79,70,229,0.08), rgba(124,58,237,0.08))',
+            border: '1px solid rgba(99,102,241,0.2)',
+          }}>
+          <span className="text-2xl flex-shrink-0">😵‍💫</span>
+          <div className="flex-1">
+            <span className="text-sm font-bold" style={{ color: 'var(--text)' }}>
+              Jargon overload?{' '}
+            </span>
+            <span className="text-sm" style={{ color: 'var(--text3)' }}>
+              Smarty is here to translate "Geek" to "Human" — ask anything about specs below!
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs font-black flex-shrink-0"
+            style={{ color: '#a78bfa' }}>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            Smarty is Online
+          </div>
+        </div>
+      </div>
+
       {/* ── FEATURED PHONES ───────────────────────────────────────────── */}
       {phoneFeatured.length > 0 && (
         <section className="py-16 px-6">

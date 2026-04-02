@@ -28,16 +28,37 @@ export default function PriceAlertForm({ slug, currentBestPrice }) {
     setLoading(false);
   };
 
+  const inputStyle = {
+    width: '100%',
+    background: 'var(--input-bg)',
+    border: '1px solid var(--border)',
+    borderRadius: '12px',
+    padding: '12px 16px',
+    fontSize: '14px',
+    color: 'var(--text)',
+    outline: 'none',
+    boxSizing: 'border-box',
+  };
+
   if (status === 'success') {
     return (
-      <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center">
-        <div className="text-3xl mb-2">✅</div>
-        <div className="font-black text-green-700 mb-1">Alert Set!</div>
-        <p className="text-sm text-green-600">
-          We'll email you at <strong>{email}</strong> when the price drops to{' '}
-          <strong>{formatPrice(parseInt(targetPrice))}</strong>.
+      <div style={{
+        background: 'rgba(22,163,74,0.1)',
+        border: '1px solid rgba(22,163,74,0.3)',
+        borderRadius: '16px',
+        padding: '24px',
+        textAlign: 'center',
+      }}>
+        <div style={{ fontSize: '32px', marginBottom: '8px' }}>✅</div>
+        <div style={{ fontWeight: 900, color: '#4ade80', marginBottom: '4px' }}>Alert Set!</div>
+        <p style={{ fontSize: '14px', color: 'var(--text2)' }}>
+          We'll email you at <strong style={{ color: 'var(--text)' }}>{email}</strong> when the price drops to{' '}
+          <strong style={{ color: '#4ade80' }}>{formatPrice(parseInt(targetPrice))}</strong>.
         </p>
-        <button onClick={() => setStatus(null)} className="mt-3 text-xs text-green-500 hover:underline">
+        <button
+          onClick={() => setStatus(null)}
+          style={{ marginTop: '12px', fontSize: '12px', color: 'var(--text3)', background: 'none', border: 'none', cursor: 'pointer' }}
+        >
           Set another alert
         </button>
       </div>
@@ -45,46 +66,57 @@ export default function PriceAlertForm({ slug, currentBestPrice }) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-6">
-      <p className="text-sm text-gray-500 mb-5">
-        Current best price is <strong className="text-gray-900">{formatPrice(currentBestPrice)}</strong>.
-        We'll notify you when it drops to your target.
+    <div style={{
+      background: 'var(--surface)',
+      border: '1px solid var(--border)',
+      borderRadius: '16px',
+      padding: '24px',
+    }}>
+      <p style={{ fontSize: '14px', color: 'var(--text2)', marginBottom: '20px' }}>
+        Current best price is <strong style={{ color: 'var(--text)' }}>{formatPrice(currentBestPrice)}</strong>.
+        {' '}We'll notify you when it drops to your target.
       </p>
 
-      <div className="flex flex-col gap-3">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div>
-          <label className="text-xs font-bold text-gray-500 mb-1 block">Your Email</label>
+          <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text3)', display: 'block', marginBottom: '6px' }}>
+            Your Email
+          </label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
-            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-400"
+            style={inputStyle}
           />
         </div>
 
         <div>
-          <label className="text-xs font-bold text-gray-500 mb-1 block">Target Price (₹)</label>
+          <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text3)', display: 'block', marginBottom: '6px' }}>
+            Target Price (₹)
+          </label>
           <input
             type="number"
             value={targetPrice}
             onChange={(e) => setTargetPrice(e.target.value)}
             placeholder={`e.g. ${Math.round(currentBestPrice * 0.9).toLocaleString('en-IN')}`}
-            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-400"
+            style={inputStyle}
           />
           {targetPrice && parseInt(targetPrice) < currentBestPrice && (
-            <p className="text-xs text-green-600 mt-1">
+            <p style={{ fontSize: '12px', color: '#4ade80', marginTop: '4px' }}>
               You'll save {formatPrice(currentBestPrice - parseInt(targetPrice))} from current price 🎯
             </p>
           )}
         </div>
 
         <div>
-          <label className="text-xs font-bold text-gray-500 mb-1 block">Platform</label>
+          <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text3)', display: 'block', marginBottom: '6px' }}>
+            Platform
+          </label>
           <select
             value={platform}
             onChange={(e) => setPlatform(e.target.value)}
-            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none cursor-pointer"
+            style={{ ...inputStyle, cursor: 'pointer' }}
           >
             <option value="any">Any Platform</option>
             <option value="amazon">Amazon only</option>
@@ -95,13 +127,26 @@ export default function PriceAlertForm({ slug, currentBestPrice }) {
         <button
           onClick={handleSubmit}
           disabled={!email || !targetPrice || loading}
-          className="w-full bg-blue-600 text-white font-black py-3.5 rounded-xl hover:bg-blue-700 transition disabled:opacity-40 disabled:cursor-not-allowed"
+          style={{
+            width: '100%',
+            background: 'linear-gradient(135deg, #2563eb, #7c3aed)',
+            color: '#fff',
+            fontWeight: 900,
+            padding: '14px',
+            borderRadius: '12px',
+            border: 'none',
+            cursor: (!email || !targetPrice || loading) ? 'not-allowed' : 'pointer',
+            opacity: (!email || !targetPrice || loading) ? 0.4 : 1,
+            fontSize: '14px',
+            transition: 'all 0.2s',
+            boxShadow: '0 4px 16px rgba(37,99,235,0.25)',
+          }}
         >
           {loading ? 'Setting alert...' : '🔔 Set Price Alert'}
         </button>
       </div>
 
-      <p className="text-xs text-gray-400 text-center mt-3">
+      <p style={{ fontSize: '12px', color: 'var(--text3)', textAlign: 'center', marginTop: '12px' }}>
         Free. No spam. Unsubscribe anytime.
       </p>
     </div>

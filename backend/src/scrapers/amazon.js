@@ -1,42 +1,25 @@
-const puppeteer = require('puppeteer');
+const axios = require('axios');
+const cheerio = require('cheerio');
 
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const SCRAPERAPI_KEY = process.env.SCRAPERAPI_KEY;
 
 const scrapeAmazonPrice = async (url) => {
-  let browser = null;
-
   try {
-    browser = await puppeteer.launch({
-      headless: 'new',
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-blink-features=AutomationControlled',
-        '--window-size=1920,1080',
-      ],
-    });
+    console.log(`   🔍 Amazon: ${url.substring(0, 60)}...`);
 
-   const page = await browser.newPage();
-    await page.setExtraHTTPHeaders({
-      'Accept-Language': 'en-IN,en;q=0.9',
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-    });
+    // Clean URL — keep only the /dp/ASIN part
+    const asinMatch = url.match(/\/dp\/([A-Z0-9]{10})/);
+    const cleanUrl = asinMatch
+      ? `https://www.amazon.in/dp/${asinMatch[1]}`
+      : url;
 
-    await page.setUserAgent(
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-    );
+    // Use ScraperAPI to bypass anti-bot
+    const scraperUrl = `http://api.scraperapi.com?api_key=${SCRAPERAPI_KEY}&url=${encodeURIComponent(cleanUrl)}&country_code=in`;
 
-    await page.setViewport({ width: 1920, height: 1080 });
+    const response = await axios.get(scraperUrl, { timeout: 60000 });
+    const $ = cheerio.load(response.data);
 
-    await page.evaluateOnNewDocument(() => {
-      Object.defineProperty(navigator, 'webdriver', { get: () => false });
-    });
-
-    console.log(`🌐 Opening Amazon: ${url}`);
-    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
-
-    await delay(2000);
-
+    // Try multiple price selectors (Amazon changes these occasionally)
     const priceSelectors = [
       '.a-price .a-offscreen',
       '#priceblock_ourprice',
@@ -44,54 +27,53 @@ const scrapeAmazonPrice = async (url) => {
       '.apexPriceToPay .a-offscreen',
       '#corePrice_feature_div .a-offscreen',
       '.a-price-whole',
+      '#tp_price_block_total_price_ww .a-offscreen',
+      '.reinventPricePriceToPayMargin .a-offscreen',
     ];
 
-    let price = null;
+    let priceText = null;
 
     for (const selector of priceSelectors) {
-      try {
-        const element = await page.$(selector);
-        if (element) {
-          const text = await page.evaluate((el) => el.textContent, element);
-          const cleaned = parseInt(text.replace(/[₹,\s]/g, '').trim());
-          if (!isNaN(cleaned) && cleaned > 0) {
-            price = cleaned;
-            console.log(`✅ Amazon scraped: ₹${price.toLocaleString('en-IN')}`);
-            break;
-          }
-        }
-      } catch (e) {
-        continue;
+      const text = $(selector).first().text().trim();
+      if (text && text.includes('₹')) {
+        priceText = text;
+        break;
       }
     }
 
-    if (!price) {
-      price = await page.evaluate(() => {
-        const elements = document.querySelectorAll('*');
-        for (const el of elements) {
-          const text = el.textContent.trim();
-          if (text.match(/^₹[\d,]+$/) && el.children.length === 0) {
-            const num = parseInt(text.replace(/[₹,]/g, ''));
-            if (num > 1000 && num < 500000) return num;
-          }
+    if (!priceText) {
+      // Last resort — search for any ₹ price in the page
+      $('*').each((_, el) => {
+        const text = $(el).text().trim();
+        if (text.match(/^₹[\d,]+$/) && text.length < 12) {
+          priceText = text;
+          return false;
         }
-        return null;
       });
-
-      if (price) {
-        console.log(`✅ Amazon scraped (fallback): ₹${price.toLocaleString('en-IN')}`);
-      } else {
-        console.log(`⚠️ Amazon: Could not find price for ${url}`);
-      }
     }
 
+    if (!priceText) {
+      console.log(`   ⚠️  Amazon: Price not found`);
+      return null;
+    }
+
+    const price = parseInt(priceText.replace(/[₹,\s]/g, ''));
+
+    if (isNaN(price) || price < 1000 || price > 1000000) {
+      console.log(`   ⚠️  Amazon: Invalid price ${priceText}`);
+      return null;
+    }
+
+    console.log(`   ✅ Amazon: ₹${price.toLocaleString('en-IN')}`);
     return price;
 
   } catch (err) {
-    console.log(`❌ Amazon scrape error: ${err.message}`);
+    if (err.code === 'ECONNABORTED') {
+      console.log(`   ⏱️  Amazon: Timeout`);
+    } else {
+      console.log(`   ❌ Amazon: ${err.message}`);
+    }
     return null;
-  } finally {
-    if (browser) await browser.close();
   }
 };
 

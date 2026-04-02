@@ -4,6 +4,8 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import PriceHistoryChart from '@/components/PriceHistoryChart';
 import PriceAlertForm from '@/components/PriceAlertForm';
+import PersonalizedSummary from '@/components/PersonalizedSummary';
+import Smarty from '@/components/Smarty';
 
 export default function ProductPage() {
   const { slug } = useParams();
@@ -30,16 +32,14 @@ export default function ProductPage() {
 
   const getPlatformStyle = (platform) => {
     if (platform === 'amazon') return {
-      bg: 'bg-amber-50 border-amber-200',
-      btn: 'bg-amber-400 hover:bg-amber-500 text-gray-900',
-      badge: 'bg-amber-100 text-amber-700',
+      bg: 'amazon-card',
+      btn: 'amazon-btn',
       name: 'Amazon',
       icon: '🛒',
     };
     return {
-      bg: 'bg-blue-50 border-blue-200',
-      btn: 'bg-blue-600 hover:bg-blue-700 text-white',
-      badge: 'bg-blue-100 text-blue-700',
+      bg: 'flipkart-card',
+      btn: 'flipkart-btn',
       name: 'Flipkart',
       icon: '🛍️',
     };
@@ -53,16 +53,16 @@ export default function ProductPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen t-bg t-text">
-        <div className="max-w-5xl mx-auto px-6 py-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 animate-pulse">
-            <div className="bg-gray-200 rounded-2xl h-96" />
-            <div>
-              <div className="h-4 bg-gray-200 rounded w-1/4 mb-3" />
-              <div className="h-8 bg-gray-200 rounded w-3/4 mb-3" />
-              <div className="h-6 bg-gray-200 rounded w-1/2 mb-6" />
-              <div className="h-32 bg-gray-200 rounded mb-4" />
-              <div className="h-32 bg-gray-200 rounded" />
+      <main style={{ minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', opacity: 0.4 }}>
+            <div style={{ background: 'var(--surface)', borderRadius: '16px', height: '380px' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ background: 'var(--surface)', borderRadius: '8px', height: '16px', width: '40%' }} />
+              <div style={{ background: 'var(--surface)', borderRadius: '8px', height: '32px', width: '75%' }} />
+              <div style={{ background: 'var(--surface)', borderRadius: '8px', height: '24px', width: '50%' }} />
+              <div style={{ background: 'var(--surface)', borderRadius: '12px', height: '120px' }} />
+              <div style={{ background: 'var(--surface)', borderRadius: '12px', height: '120px' }} />
             </div>
           </div>
         </div>
@@ -72,11 +72,11 @@ export default function ProductPage() {
 
   if (notFound) {
     return (
-      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-5xl mb-4">😕</div>
-          <h2 className="text-2xl font-black text-gray-900 mb-2">Product not found</h2>
-          <Link href="/" className="text-blue-600 font-bold hover:underline">Back to homepage</Link>
+      <main style={{ minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '48px', marginBottom: '16px' }}>😕</div>
+          <h2 style={{ fontSize: '24px', fontWeight: 900, marginBottom: '8px' }}>Product not found</h2>
+          <Link href="/" style={{ color: 'var(--accent)', fontWeight: 700 }}>Back to homepage</Link>
         </div>
       </main>
     );
@@ -90,41 +90,63 @@ export default function ProductPage() {
     : 0;
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main style={{ minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)' }}>
+
       {/* BREADCRUMB */}
-      <div className="max-w-5xl mx-auto px-6 pt-6">
-        <div className="flex items-center gap-2 text-xs text-gray-400">
-          <Link href="/" className="hover:text-blue-600">Home</Link>
+      <div style={{ maxWidth: '900px', margin: '0 auto', padding: '24px 24px 0' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'var(--text3)' }}>
+          <Link href="/" style={{ color: 'var(--text3)' }} onMouseEnter={e => e.target.style.color = 'var(--accent)'} onMouseLeave={e => e.target.style.color = 'var(--text3)'}>Home</Link>
           <span>→</span>
-          <Link href="/phones" className="hover:text-blue-600">Phones</Link>
+          <Link href="/phones" style={{ color: 'var(--text3)' }}>Phones</Link>
           <span>→</span>
-          <Link href={`/phones?brand=${product.brand}`} className="hover:text-blue-600">{product.brand}</Link>
+          <Link href={`/phones?brand=${product.brand}`} style={{ color: 'var(--text3)' }}>{product.brand}</Link>
           <span>→</span>
-          <span className="text-gray-600 font-medium">{product.name}</span>
+          <span style={{ color: 'var(--text2)', fontWeight: 600 }}>{product.name}</span>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 py-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div style={{ maxWidth: '900px', margin: '0 auto', padding: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
 
           {/* LEFT — Image */}
           <div>
-            <div className="bg-white rounded-2xl border border-gray-200 p-8 flex items-center justify-center mb-3 relative">
+            <div style={{
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
+              borderRadius: '20px',
+              padding: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '12px',
+              position: 'relative',
+              minHeight: '280px',
+            }}>
               {savings > 0 && (
-                <div className="absolute top-4 left-4 bg-green-500 text-white text-xs font-black px-2 py-1 rounded-lg">
+                <div style={{
+                  position: 'absolute', top: '16px', left: '16px',
+                  background: '#16a34a', color: '#fff', fontSize: '11px',
+                  fontWeight: 900, padding: '4px 10px', borderRadius: '8px',
+                }}>
                   SAVE {formatPrice(savings)}
                 </div>
               )}
               <button
                 onClick={handleShare}
-                className="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs font-bold px-3 py-1.5 rounded-lg transition"
+                style={{
+                  position: 'absolute', top: '16px', right: '16px',
+                  background: 'var(--surface)', border: '1px solid var(--border)',
+                  color: 'var(--text2)', fontSize: '12px', fontWeight: 700,
+                  padding: '6px 12px', borderRadius: '8px', cursor: 'pointer',
+                  transition: 'all 0.2s',
+                }}
               >
                 {copied ? '✅ Copied!' : '🔗 Share'}
               </button>
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-full max-h-72 object-contain"
+                style={{ width: '100%', maxHeight: '260px', objectFit: 'contain' }}
               />
             </div>
           </div>
@@ -132,18 +154,23 @@ export default function ProductPage() {
           {/* RIGHT — Info */}
           <div>
             {/* Brand + Name */}
-            <div className="text-xs font-bold text-blue-600 uppercase tracking-wider mb-1">
+            <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '4px' }}>
               {product.brand}
             </div>
-            <h1 className="text-2xl font-black text-gray-900 mb-1 tracking-tight leading-tight">
+            <h1 style={{ fontSize: '22px', fontWeight: 900, color: 'var(--text)', marginBottom: '8px', lineHeight: 1.25 }}>
               {product.name}
             </h1>
 
             {/* Storage pills */}
             {product.storage?.length > 0 && (
-              <div className="flex gap-2 flex-wrap mb-4">
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
                 {product.storage.map((s) => (
-                  <span key={s} className="text-xs bg-gray-100 text-gray-600 font-bold px-3 py-1 rounded-full border border-gray-200">
+                  <span key={s} style={{
+                    fontSize: '11px', fontWeight: 700,
+                    background: 'var(--surface)', color: 'var(--text2)',
+                    border: '1px solid var(--border)',
+                    padding: '4px 12px', borderRadius: '999px',
+                  }}>
                     {s}
                   </span>
                 ))}
@@ -151,43 +178,59 @@ export default function ProductPage() {
             )}
 
             {/* Best price banner */}
-            <div className="bg-green-50 border border-green-200 rounded-2xl px-5 py-4 mb-4">
-              <div className="flex items-center justify-between">
+            <div style={{
+              background: 'rgba(22,163,74,0.1)',
+              border: '1px solid rgba(22,163,74,0.3)',
+              borderRadius: '16px',
+              padding: '16px 20px',
+              marginBottom: '16px',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
-                  <div className="text-xs text-green-600 font-bold uppercase tracking-wide mb-1">
+                  <div style={{ fontSize: '11px', color: '#4ade80', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '4px' }}>
                     🏆 Best Price
                   </div>
-                  <div className="text-3xl font-black text-green-700">
+                  <div style={{ fontSize: '28px', fontWeight: 900, color: '#4ade80' }}>
                     {formatPrice(bestPrice)}
                   </div>
-                  <div className="text-xs text-green-500 mt-1 capitalize">
+                  <div style={{ fontSize: '11px', color: '#86efac', marginTop: '4px', textTransform: 'capitalize' }}>
                     on {bestPlatform?.platform}
                   </div>
                 </div>
                 {savings > 0 && (
-                  <div className="text-right">
-                    <div className="text-xs text-gray-400 mb-1">You save vs other platforms</div>
-                    <div className="text-xl font-black text-green-600">{formatPrice(savings)}</div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '11px', color: 'var(--text3)', marginBottom: '4px' }}>You save vs other platforms</div>
+                    <div style={{ fontSize: '20px', fontWeight: 900, color: '#4ade80' }}>{formatPrice(savings)}</div>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Specs */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-5">
-              <div className="text-xs font-black text-gray-400 uppercase tracking-wider mb-3">
+            <div style={{
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
+              borderRadius: '16px',
+              padding: '20px',
+            }}>
+              <div style={{ fontSize: '11px', fontWeight: 900, color: 'var(--text3)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>
                 Key Specs
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 {[
                   { label: 'RAM', value: product.ram },
                   { label: 'Battery', value: product.battery },
                   { label: 'Display', value: product.display },
                   { label: 'Camera', value: product.camera },
                 ].filter(s => s.value).map((spec) => (
-                  <div key={spec.label} className="bg-gray-50 rounded-xl p-3">
-                    <div className="text-xs text-gray-400 mb-0.5">{spec.label}</div>
-                    <div className="text-xs font-bold text-gray-900 leading-snug">{spec.value}</div>
+                  <div key={spec.label} style={{
+                    background: 'rgba(255,255,255,0.03)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '12px',
+                    padding: '12px',
+                  }}>
+                    <div style={{ fontSize: '10px', color: 'var(--text3)', marginBottom: '2px' }}>{spec.label}</div>
+                    <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text)', lineHeight: 1.4 }}>{spec.value}</div>
                   </div>
                 ))}
               </div>
@@ -196,67 +239,103 @@ export default function ProductPage() {
         </div>
 
         {/* PRICE COMPARISON TABLE */}
-        <div className="mt-10">
-          <h2 className="text-xl font-black text-gray-900 mb-4">
+        <div style={{ marginTop: '40px' }}>
+          <h2 style={{ fontSize: '20px', fontWeight: 900, color: 'var(--text)', marginBottom: '16px' }}>
             💰 Price Comparison
           </h2>
 
-          <div className="flex flex-col gap-3">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {sortedPrices.map((price, index) => {
-              const style = getPlatformStyle(price.platform);
+              const isAmazon = price.platform === 'amazon';
+              const isBest = index === 0;
               return (
                 <div
                   key={price._id}
-                  className={`rounded-2xl border-2 px-6 py-5 transition ${style.bg} ${index === 0 ? 'border-green-300' : ''}`}
+                  style={{
+                    borderRadius: '16px',
+                    border: isBest ? '2px solid rgba(22,163,74,0.5)' : '1px solid var(--border)',
+                    padding: '20px 24px',
+                    background: isBest
+                      ? 'rgba(22,163,74,0.06)'
+                      : isAmazon
+                        ? 'rgba(251,191,36,0.05)'
+                        : 'rgba(59,130,246,0.05)',
+                    transition: 'all 0.2s',
+                  }}
                 >
-                  <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
                     {/* Platform info */}
-                    <div className="flex items-center gap-3">
-                      {index === 0 && (
-                        <span className="bg-green-500 text-white text-xs font-black px-2 py-1 rounded-lg">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      {isBest && (
+                        <span style={{
+                          background: '#16a34a', color: '#fff',
+                          fontSize: '11px', fontWeight: 900,
+                          padding: '3px 10px', borderRadius: '6px',
+                        }}>
                           BEST DEAL
                         </span>
                       )}
-                      <span className="text-2xl">{style.icon}</span>
+                      <span style={{ fontSize: '24px' }}>{isAmazon ? '🛒' : '🛍️'}</span>
                       <div>
-                        <div className="font-black text-gray-900 text-lg">{style.name}</div>
-                        <div className={`text-xs font-bold mt-0.5 ${price.inStock ? 'text-green-600' : 'text-red-500'}`}>
+                        <div style={{ fontWeight: 900, color: 'var(--text)', fontSize: '16px' }}>
+                          {isAmazon ? 'Amazon' : 'Flipkart'}
+                        </div>
+                        <div style={{ fontSize: '11px', fontWeight: 700, marginTop: '2px', color: price.inStock ? '#4ade80' : '#f87171' }}>
                           {price.inStock ? '✅ In Stock' : '❌ Out of Stock'}
                         </div>
                       </div>
                     </div>
 
                     {/* Price + button */}
-                    <div className="flex items-center gap-5">
-                      <div className="text-right">
-                        <div className="text-2xl font-black text-gray-900">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontSize: '22px', fontWeight: 900, color: 'var(--text)' }}>
                           {formatPrice(price.price)}
                         </div>
                         {index > 0 && (
-                          <div className="text-xs text-red-400 font-medium">
+                          <div style={{ fontSize: '11px', color: '#f87171', fontWeight: 500 }}>
                             +{formatPrice(price.price - bestPrice)} more expensive
                           </div>
                         )}
                         {index === 0 && savings > 0 && (
-                          <div className="text-xs text-green-500 font-medium">
+                          <div style={{ fontSize: '11px', color: '#4ade80', fontWeight: 500 }}>
                             Cheapest option 🏆
                           </div>
                         )}
                       </div>
-                      
-                        <a href={price.affiliateUrl}
+
+                      <a
+                        href={price.affiliateUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => {
                           const btn = e.currentTarget;
                           btn.textContent = 'Opening...';
                           setTimeout(() => {
-                            if (btn) btn.textContent = `Buy on ${style.name}`;
+                            if (btn) btn.textContent = `Buy on ${isAmazon ? 'Amazon' : 'Flipkart'}`;
                           }, 2000);
                         }}
-                        className={`px-6 py-3 rounded-xl font-black text-sm transition whitespace-nowrap ${style.btn} ${!price.inStock ? 'opacity-40 pointer-events-none' : ''}`}
+                        style={{
+                          padding: '12px 24px',
+                          borderRadius: '12px',
+                          fontWeight: 900,
+                          fontSize: '13px',
+                          textDecoration: 'none',
+                          whiteSpace: 'nowrap',
+                          cursor: price.inStock ? 'pointer' : 'not-allowed',
+                          opacity: price.inStock ? 1 : 0.4,
+                          pointerEvents: price.inStock ? 'auto' : 'none',
+                          background: isAmazon
+                            ? 'linear-gradient(135deg, #f59e0b, #d97706)'
+                            : 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                          color: '#fff',
+                          boxShadow: isAmazon
+                            ? '0 4px 16px rgba(245,158,11,0.3)'
+                            : '0 4px 16px rgba(37,99,235,0.3)',
+                          transition: 'all 0.2s',
+                        }}
                       >
-                        Buy on {style.name}
+                        Buy on {isAmazon ? 'Amazon' : 'Flipkart'}
                       </a>
                     </div>
                   </div>
@@ -264,23 +343,33 @@ export default function ProductPage() {
               );
             })}
           </div>
-            {/* PRICE HISTORY */}
-          <div className="mt-10">
-            <h2 className="text-xl font-black text-gray-900 mb-2">📈 Price History</h2>
-            <p className="text-xs text-gray-400 mb-4">
+
+          {/* ── PERSONALIZED AI SUMMARY ── */}
+          <div style={{ marginTop: '40px' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: 900, color: 'var(--text)', marginBottom: '16px' }}>
+              ✨ AI Product Summary
+            </h2>
+            <PersonalizedSummary slug={product.slug} />
+          </div>
+
+          {/* PRICE HISTORY */}
+          <div style={{ marginTop: '40px' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: 900, color: 'var(--text)', marginBottom: '8px' }}>📈 Price History</h2>
+            <p style={{ fontSize: '12px', color: 'var(--text3)', marginBottom: '16px' }}>
               Price tracking starts from when a product is added. History builds up over time.
             </p>
             <PriceHistoryChart slug={product.slug} currentPrices={product.prices} />
           </div>
 
           {/* PRICE ALERT */}
-          <div className="mt-10">
-            <h2 className="text-xl font-black text-gray-900 mb-4">🔔 Price Drop Alert</h2>
+          <div style={{ marginTop: '40px' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: 900, color: 'var(--text)', marginBottom: '16px' }}>🔔 Price Drop Alert</h2>
             <PriceAlertForm slug={product.slug} currentBestPrice={bestPrice} />
           </div>
+
           {/* Last updated */}
-          <div className="flex items-center justify-center gap-2 mt-4">
-            <span className="text-xs text-gray-400">
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
+            <span style={{ fontSize: '12px', color: 'var(--text3)' }}>
               🕐 Prices last updated:{' '}
               {new Date(product.prices[0]?.lastUpdated).toLocaleDateString('en-IN', {
                 day: 'numeric', month: 'long', year: 'numeric',
@@ -290,10 +379,21 @@ export default function ProductPage() {
         </div>
 
         {/* AFFILIATE DISCLOSURE */}
-        <div className="mt-6 bg-blue-50 border border-blue-100 rounded-xl px-5 py-3 text-xs text-blue-500 text-center">
+        <div style={{
+          marginTop: '24px',
+          background: 'rgba(37,99,235,0.08)',
+          border: '1px solid rgba(37,99,235,0.2)',
+          borderRadius: '12px',
+          padding: '12px 20px',
+          fontSize: '12px',
+          color: 'var(--text3)',
+          textAlign: 'center',
+        }}>
           💡 ComparIO earns a small affiliate commission when you buy through our links — at no extra cost to you.
         </div>
       </div>
+      {/* Smarty with product context */}
+<Smarty context={{ productName: product.name, brand: product.brand, page: 'product' }} />
     </main>
   );
 }

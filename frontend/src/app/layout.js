@@ -2,6 +2,7 @@ import { Geist } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import FAB from '@/components/FAB';
+import Smarty from '@/components/Smarty';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { ToastProvider } from '@/components/Toast';
@@ -22,7 +23,7 @@ export default function RootLayout({ children }) {
             <ToastProvider>
               <Navbar />
               {children}
-              <FAB />
+              <Smarty />
             </ToastProvider>
           </AuthProvider>
         </ThemeProvider>
