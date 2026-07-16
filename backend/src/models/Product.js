@@ -26,6 +26,18 @@ const productSchema = new mongoose.Schema(
     prices: [priceSchema],
     featured: { type: Boolean, default: false },
 
+    parsedSpecs: { type: mongoose.Schema.Types.Mixed, default: null },
+    fullSpecs: { type: mongoose.Schema.Types.Mixed, default: null },
+    specsComplete: { type: Boolean, default: false },
+
+    cameraSubScores: {
+      nightPhotography: { type: Number, default: 5 },
+      selfiePortrait:   { type: Number, default: 5 },
+      opticalZoom:      { type: Number, default: 5 },
+      videography:      { type: Number, default: 5 },
+      everydayShots:    { type: Number, default: 5 },
+    },
+
     // SCORING FIELDS — used by recommender
     scores: {
       camera: { type: Number, default: 5 },      // 1-10
@@ -35,6 +47,19 @@ const productSchema = new mongoose.Schema(
       value: { type: Number, default: 5 },       // 1-10
       build: { type: Number, default: 5 },       // 1-10
       portability: { type: Number, default: 5 }, // 1-10 (laptops)
+
+      reviewAnalysis: {
+        platform: String,
+        trustScore: Number,
+        verdict: String,
+        verdictColor: String,
+        stats: mongoose.Schema.Types.Mixed,
+        redFlags: [mongoose.Schema.Types.Mixed],
+        repeatedPhrases: [mongoose.Schema.Types.Mixed],
+        aiVerdict: String,
+        sampleReviews: [mongoose.Schema.Types.Mixed],
+        analyzedAt: Date,
+},
     },
 
     // Tags for recommender matching

@@ -1,11 +1,30 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import PriceHistoryChart from '@/components/PriceHistoryChart';
 import PriceAlertForm from '@/components/PriceAlertForm';
 import PersonalizedSummary from '@/components/PersonalizedSummary';
 import Smarty from '@/components/Smarty';
+import ReviewShield from '@/components/ReviewShield';
+import { use3DCard } from '@/hooks/useAnimations';
+
+function ProductImage3D({ image, name }) {
+  const imgRef = useRef(null);
+  use3DCard(imgRef);
+  
+  return (
+    <div className="card-3d-wrap" style={{ perspective: '1000px', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div ref={imgRef} className="card-3d" style={{ transition: 'transform 0.1s ease', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+        <img
+          src={image}
+          alt={name}
+          style={{ width: '100%', maxHeight: '260px', objectFit: 'contain' }}
+        />
+      </div>
+    </div>
+  );
+}
 
 export default function ProductPage() {
   const { slug } = useParams();
@@ -143,11 +162,7 @@ export default function ProductPage() {
               >
                 {copied ? '✅ Copied!' : '🔗 Share'}
               </button>
-              <img
-                src={product.image}
-                alt={product.name}
-                style={{ width: '100%', maxHeight: '260px', objectFit: 'contain' }}
-              />
+              <ProductImage3D image={product.image} name={product.name} />
             </div>
           </div>
 
@@ -343,6 +358,12 @@ export default function ProductPage() {
               );
             })}
           </div>
+          {/* REVIEW SHIELD */}
+            <div className="mt-10">
+              <h2 className="text-xl font-black mb-4" style={{ color: 'var(--text)' }}>
+                🛡️ Review Authenticity Check
+              </h2>
+            </div>
 
           {/* ── PERSONALIZED AI SUMMARY ── */}
           <div style={{ marginTop: '40px' }}>

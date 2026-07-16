@@ -6,7 +6,7 @@ import Smarty from '@/components/Smarty';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { ToastProvider } from '@/components/Toast';
-
+import CustomCursor from '@/components/CustomCursor';
 const geist = Geist({ subsets: ['latin'] });
 
 export const metadata = {
@@ -24,6 +24,7 @@ export default function RootLayout({ children }) {
               <Navbar />
               {children}
               <Smarty />
+              <CustomCursor />
             </ToastProvider>
           </AuthProvider>
         </ThemeProvider>
