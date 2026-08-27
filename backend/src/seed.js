@@ -12,7 +12,7 @@ const products = [
     display: '6.9 inch Super Retina XDR OLED ProMotion',
     camera: '48MP Main + 48MP Ultra Wide + 48MP Telephoto',
     battery: '5200 mAh', os: 'iOS', featured: true,
-    scores: { camera: 10, battery: 8, performance: 10, display: 10, value: 6, build: 10, portability: 7 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['photography', 'premium', 'business', 'ios'],
     prices: [
       { platform: 'amazon', price: 159999, affiliateUrl: 'https://www.amazon.in/iPhone-Pro-Max-256-Promotion/dp/B0FQFNQ5LX/ref=sr_1_1_sspa?sr=8-1-spons&aref=XVOmLfK8nn&sp_csd=d2lkZ2V0TmFtZT1zcF9hdG',inStock: true },
@@ -27,7 +27,7 @@ const products = [
     display: '6.1 inch Super Retina XDR OLED',
     camera: '48MP Main + 12MP Ultra Wide',
     battery: '3577 mAh', os: 'iOS', featured: true,
-    scores: { camera: 9, battery: 7, performance: 9, display: 9, value: 7, build: 9, portability: 9 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['photography', 'premium', 'ios', 'compact'],
     prices: [
       { platform: 'amazon', price: 89999, affiliateUrl: 'https://www.amazon.in/iPhone-17e-256-GB-Starting/dp/B0GQVQY8B7/ref=sr_1_5?sr=8-5', inStock: true },
@@ -42,7 +42,7 @@ const products = [
     display: '6.9 inch Dynamic AMOLED 2X 120Hz',
     camera: '200MP Main + 50MP Ultra Wide + 50MP Telephoto',
     battery: '5000 mAh', os: 'Android', featured: true,
-    scores: { camera: 10, battery: 9, performance: 10, display: 10, value: 6, build: 9, portability: 6 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['photography', 'premium', 'android', 'business', 'gaming'],
     prices: [
       { platform: 'amazon', price: 134999, affiliateUrl: 'https://www.amazon.in/Samsung-Smartphone-Titanium-Snapdragon-ProVisual/dp/B0DSKMKJV5/ref=sr_1_3?sr=8-3', inStock: true },
@@ -57,7 +57,7 @@ const products = [
     display: '6.2 inch Dynamic AMOLED 2X 120Hz',
     camera: '50MP Main + 12MP Ultra Wide + 10MP Telephoto',
     battery: '4000 mAh', os: 'Android', featured: true,
-    scores: { camera: 8, battery: 7, performance: 9, display: 9, value: 7, build: 8, portability: 8 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['android', 'premium', 'compact', 'business'],
     prices: [
       { platform: 'amazon', price: 74999, affiliateUrl: 'https://www.amazon.in/Samsung-Smartphone-Icyblue-Snapdragon-ProVisual/dp/B0DSBVGKVF/ref=sr_1_4?sr=8-4', inStock: true },
@@ -72,7 +72,7 @@ const products = [
     display: '6.82 inch LTPO AMOLED 120Hz',
     camera: '50MP Hasselblad Main + 50MP Ultra Wide + 50MP Periscope',
     battery: '6000 mAh', os: 'Android', featured: true,
-    scores: { camera: 8, battery: 10, performance: 9, display: 9, value: 9, build: 8, portability: 7 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['battery', 'android', 'gaming', 'value', 'performance'],
     prices: [
       { platform: 'amazon', price: 69999, affiliateUrl:'https://www.amazon.in/OnePlus-Smarter-Lifetime-Display-Warranty/dp/B0DQ8W9CTT/ref=sr_1_2?sr=8-2', inStock: true },
@@ -87,7 +87,7 @@ const products = [
     display: '6.77 inch AMOLED 120Hz',
     camera: '50MP Main + 8MP Ultra Wide',
     battery: '6000 mAh', os: 'Android', featured: false,
-    scores: { camera: 7, battery: 10, performance: 7, display: 8, value: 10, build: 7, portability: 8 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['battery', 'value', 'budget', 'android', 'student'],
     prices: [
       { platform: 'amazon', price: 39999, affiliateUrl: 'https://www.amazon.in/stores/page/8E6BF28E-AE0B-4A90-93A5-1C7D07B8E896/?_encoding=UTF8&store_ref=SB_A08490631LEW6WSNIWTHE-A0268544PX8Z5LX293SF&pd_rd_plhdr=t&aaxitk=06701eb32cd1ba774ab3fff3826f03e2&hsa_cr_id=0&lp_asins=B0FZT1LXPZ%2CB0FZSXYV6K%2CB0FZT1D63F&lp_query=oneplus%2015R&lp_slot=auto-sparkle-hsa-tetris&aref=Cbm7rW3ZDT&ref_=sbx_s_sparkle_sbtcd_hlhttps://www.amazon.in/dp/oneplus-15r', inStock: true },
@@ -102,7 +102,7 @@ const products = [
     display: '6.77 inch AMOLED 120Hz',
     camera: '50MP Main + 50MP Telephoto + 8MP Ultra Wide',
     battery: '5000 mAh', os: 'Android', featured: false,
-    scores: { camera: 8, battery: 8, performance: 7, display: 8, value: 10, build: 8, portability: 8 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['value', 'budget', 'student', 'android', 'photography'],
     prices: [
       { platform: 'amazon', price: 27999, affiliateUrl:'https://www.amazon.in/Nothing-Phone-128GB-Storage-White/dp/B0DZTMFWDB/ref=sr_1_4?sr=8-4', inStock: true },
@@ -117,7 +117,7 @@ const products = [
     display: '6.7 inch AMOLED 120Hz Curved',
     camera: '50MP Sony Main + 50MP Periscope Telephoto',
     battery: '5200 mAh', os: 'Android', featured: false,
-    scores: { camera: 8, battery: 8, performance: 7, display: 8, value: 9, build: 7, portability: 8 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['photography', 'value', 'budget', 'android'],
     prices: [
       { platform: 'amazon', price: 32999, affiliateUrl: 'https://www.amazon.in/realme-16-Pro-Smartphone-Snapdragon/dp/B0GC5KQSTV/ref=sr_1_3?sr=8-3', inStock: true },
@@ -134,7 +134,7 @@ const products = [
     display: '6.67 inch AMOLED 120Hz',
     camera: '50MP Zeiss Main + 50MP Ultra Wide + 50MP Telephoto',
     battery: '5700 mAh',
-     scores: { camera: 8, battery:9, performance: 7, display: 9, value: 8, build: 7, portability: 8 },
+     scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['photography', 'value', 'budget', 'android'],
     featured: false,
     prices: [
@@ -152,7 +152,7 @@ const products = [
     display: '6.3 inch OLED 120Hz',
     camera: '48MP Main + 13MP Ultra Wide',
     battery: '5100 mAh',
-     scores: { camera: 8, battery: 8, performance: 7, display: 8, value: 9, build: 7, portability: 8 },
+     scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['photography', 'value', 'budget', 'android'],
     featured: false,
     prices: [
@@ -167,7 +167,7 @@ const products = [
     battery: '5000 mAh 45W', os: 'Android', processor: 'Exynos 1580', weight: '198g',
     features: ['IP67', '5G', '6 years OS updates'],
     featured: false,
-    scores: { camera: 7, battery: 8, performance: 7, display: 8, value: 9, build: 8, portability: 8 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['student', 'value', 'android', 'everyday', 'durability'],
     prices: [
       { platform: 'amazon', price: 38999, affiliateUrl: 'https://www.amazon.in/Samsung-Galaxy-Awesome-Gemini-Intelligence/dp/B0DYDQ7PDN/ref=sr_1_2?sr=8-2', inStock: true },
@@ -181,7 +181,7 @@ const products = [
     battery: '5410 mAh 90W', os: 'Android', processor: 'Snapdragon 8 Elite', weight: '226g',
     features: ['IP68', 'Ceramic Back', 'Vapor Chamber', 'UFS 4.0'],
     featured: true,
-    scores: { camera: 10, battery: 9, performance: 10, display: 10, value: 7, build: 9, portability: 6 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['photography', 'premium', 'android', 'zoom', 'gaming', 'sunlight'],
     prices: [
       { platform: 'amazon', price: 140000, affiliateUrl: 'https://www.amazon.in/XIAOMI-Snapdragon-HyperCharge-Flagship-Experience/dp/B0GMQG7QM5/ref=sr_1_3?sr=8-3', inStock: true },
@@ -195,7 +195,7 @@ const products = [
     battery: '6100 mAh 120W', os: 'Android', processor: 'Snapdragon 8 Elite', weight: '213g',
     features: ['IP68', 'Vapor Chamber', 'UFS 4.0', 'GT Mode', '5G'],
     featured: false,
-    scores: { camera: 8, battery: 10, performance: 10, display: 9, value: 9, build: 8, portability: 8 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['gaming', 'performance', 'battery', 'charging', 'android', 'value'],
     prices: [
       { platform: 'amazon', price: 79999, affiliateUrl: 'https://www.amazon.in/iQOO-Storage-Fastest-Snapdragon-Processor/dp/B0FYGC3YWR/ref=sr_1_3?sr=8-3', inStock: true },
@@ -209,7 +209,7 @@ const products = [
     battery: '4700 mAh 45W', os: 'Android', processor: 'Google Tensor G4', weight: '199g',
     features: ['IP68', 'Gorilla Glass Victus 2', '7 years OS updates', 'AI Features'],
     featured: false,
-    scores: { camera: 10, battery: 8, performance: 8, display: 9, value: 7, build: 9, portability: 8 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['photography', 'android', 'ai', 'business', 'just-works', 'durability'],
     prices: [
       { platform: 'amazon', price: 85999, affiliateUrl: 'https://www.amazon.in/Google-Pixel-Pro-Obsidian-Storage/dp/B0FLQQF6YP/ref=sr_1_3?sr=8-3', inStock: true },
@@ -223,7 +223,7 @@ const products = [
     battery: '6000 mAh 90W', os: 'Android', processor: 'Dimensity 9400', weight: '229g',
     features: ['IP69', 'Zeiss Optics', 'Vapor Chamber', '5G'],
     featured: false,
-    scores: { camera: 10, battery: 10, performance: 9, display: 10, value: 7, build: 9, portability: 6 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['photography', 'premium', 'battery', 'zoom', 'android', 'sunlight'],
     prices: [
       { platform: 'amazon', price: 94999, affiliateUrl: 'https://www.amazon.in/vivo-X300-Pro-Additional-Exchange/dp/B0G26JXRTX/ref=sr_1_2?sr=8-2', inStock: true },
@@ -237,7 +237,7 @@ const products = [
     battery: '5500 mAh 125W', os: 'Android', processor: 'Dimensity 8350', weight: '185g',
     features: ['IP69', 'Gorilla Glass Victus', 'Vegan Leather', '5G'],
     featured: false,
-    scores: { camera: 8, battery: 9, performance: 8, display: 9, value: 9, build: 9, portability: 8 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['value', 'battery', 'android', 'charging', 'durability', 'student'],
     prices: [
       { platform: 'amazon', price: 34999, affiliateUrl: 'https://www.amazon.in/Motorola-Pantone-Shadow-256GB-Storage/dp/B0F83DDCVW/ref=sr_1_1?sr=8-1', inStock: true },
@@ -251,7 +251,7 @@ const products = [
     battery: '6000 mAh 90W', os: 'Android', processor: 'Snapdragon 8 Gen 3', weight: '210g',
     features: ['IP64', 'Vapor Chamber', 'UFS 4.0', '5G'],
     featured: false,
-    scores: { camera: 7, battery: 10, performance: 10, display: 8, value: 10, build: 7, portability: 7 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['gaming', 'performance', 'battery', 'value', 'budget', 'android'],
     prices: [
       { platform: 'amazon', price: 29999, affiliateUrl: 'https://www.amazon.in/POCO-Snapdragon-Processor-Battery-Display/dp/B0G52W6CFB/ref=sr_1_3?sr=8-3', inStock: true },
@@ -265,7 +265,7 @@ const products = [
     battery: '5910 mAh 80W', os: 'Android', processor: 'Dimensity 9400', weight: '215g',
     features: ['IP69', 'Hasselblad Tuning', 'Vapor Chamber', '5G'],
     featured: false,
-    scores: { camera: 9, battery: 9, performance: 9, display: 10, value: 8, build: 9, portability: 8 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['photography', 'premium', 'android', 'zoom', 'battery', 'sunlight'],
     prices: [
       { platform: 'amazon', price: 89999, affiliateUrl: 'https://www.amazon.in/Titanium-Charcoal-Storage-Additional-Exchange/dp/B0FXXJRXVX/ref=sr_1_1?sr=8-1', inStock: true },
@@ -279,7 +279,7 @@ const products = [
     battery: '6200 mAh 90W', os: 'Android', processor: 'Dimensity 1400 Ultra', weight: '204g',
     features: ['IP68', '5G'],
     featured: false,
-    scores: { camera: 8, battery: 10, performance: 7, display: 8, value: 10, build: 7, portability: 8 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['budget', 'battery', 'student', 'value', 'android', 'photography'],
     prices: [
       { platform: 'amazon', price: 27999, affiliateUrl: 'https://www.amazon.in/Xiaomi-Note-14-Pro-5G/dp/B0DQLTWBH7/ref=sr_1_3?sr=8-3', inStock: true },
@@ -293,7 +293,7 @@ const products = [
     battery: '5000 mAh 45W', os: 'Android', processor: 'Snapdragon 7 Gen 1', weight: '190g',
     features: ['IP67', '5G'],
     featured: false,
-    scores: { camera: 7, battery: 8, performance: 7, display: 8, value: 9, build: 7, portability: 8 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['student', 'everyday', 'value', 'android', 'budget'],
     prices: [
       { platform: 'amazon', price: 26999, affiliateUrl: 'https://www.amazon.in/SAMSUNG-Galaxy-F56-Green-128/dp/B0FY2K8D9S/ref=sr_1_5?sr=8-5', inStock: true },
@@ -307,7 +307,7 @@ const products = [
     battery: '5160 mAh 45W', os: 'Android', processor: 'Dimensity 9000', weight: '200g',
     features: ['5G'],
     featured: false,
-    scores: { camera: 8, battery: 7, performance: 8, display: 8, value: 9, build: 7, portability: 8 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['value', 'photography', 'android', 'zoom'],
     prices: [
       { platform: 'amazon', price: 34999, affiliateUrl: 'https://www.amazon.in/dp/tecno-phantom-x2-pro', inStock: true },
@@ -325,7 +325,7 @@ const products = [
     display: '13.6 inch Liquid Retina',
     processor: 'Apple M4', os: 'macOS',
     weight: '1.24 kg', battery: '18 hours', featured: true,
-    scores: { camera: 6, battery: 10, performance: 9, display: 9, value: 7, build: 10, portability: 10 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['student', 'business', 'creative', 'programming', 'premium', 'lightweight'],
     prices: [
       { platform: 'amazon', price: 99999, affiliateUrl: 'https://www.amazon.in/Apple-MacBook-13-inch-10-core-Unified/dp/B0DZDDKTQZ/ref=sr_1_1_sspa?sr=8-1-spons&aref=TKZsjhflX8&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY', inStock: true },
@@ -340,7 +340,7 @@ const products = [
     display: '14.2 inch Liquid Retina XDR ProMotion',
     processor: 'Apple M4 Pro', os: 'macOS',
     weight: '1.61 kg', battery: '24 hours', featured: true,
-    scores: { camera: 7, battery: 10, performance: 10, display: 10, value: 6, build: 10, portability: 9 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['creative', 'programming', 'business', 'premium', 'video-editing'],
     prices: [
       { platform: 'amazon', price: 189999, affiliateUrl: 'https://www.amazon.in/Apple-2024-MacBook-Laptop-10%E2%80%91core/dp/B0DLHN2KNG/ref=sr_1_1_sspa?sr=8-1-spons&aref=dODEwj3s9V&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1', inStock: true },
@@ -355,7 +355,7 @@ const products = [
     display: '14 inch QHD+ OLED 165Hz',
     processor: 'AMD Ryzen 9 + RTX 4060', os: 'Windows',
     weight: '1.65 kg', battery: '10 hours', featured: true,
-    scores: { camera: 5, battery: 7, performance: 10, display: 10, value: 8, build: 9, portability: 8 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['gaming', 'creative', 'video-editing', 'performance', 'student'],
     prices: [
       { platform: 'amazon', price: 129999, affiliateUrl: 'https://www.amazon.in/ASUS-Zephyrus-5060-8GB-Windows-GA403UM-QS007WS/dp/B0F9X945VW/ref=sr_1_3?sr=8-3', inStock: true },
@@ -370,7 +370,7 @@ const products = [
     display: '13.4 inch FHD+ OLED',
     processor: 'Intel Core Ultra 7', os: 'Windows',
     weight: '1.17 kg', battery: '12 hours', featured: false,
-    scores: { camera: 6, battery: 8, performance: 8, display: 9, value: 7, build: 9, portability: 10 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['business', 'student', 'lightweight', 'programming', 'premium'],
     prices: [
       { platform: 'amazon', price: 119999, affiliateUrl: 'https://www.amazon.in/Dell-XPS-13-9345-Snapdragon/dp/B0DJM69JDV/ref=sr_1_3?sr=8-3', inStock: true },
@@ -385,7 +385,7 @@ const products = [
     display: '15.6 inch FHD IPS',
     processor: 'AMD Ryzen 7 7730U', os: 'Windows',
     weight: '1.67 kg', battery: '10 hours', featured: false,
-    scores: { camera: 5, battery: 7, performance: 7, display: 7, value: 10, build: 7, portability: 8 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['student', 'budget', 'value', 'programming', 'everyday'],
     prices: [
       { platform: 'amazon', price: 54999, affiliateUrl: 'https://www.amazon.in/Lenovo-IdeaPad-Integrated-Graphics-83J2000HIN/dp/B0DVGF96B4/ref=sr_1_3?sr=8-3', inStock: true },
@@ -400,7 +400,7 @@ const products = [
     display: '14 inch 2.8K OLED 120Hz',
     processor: 'Intel Core i7-13700H', os: 'Windows',
     weight: '1.46 kg', battery: '11 hours', featured: false,
-    scores: { camera: 5, battery: 7, performance: 8, display: 9, value: 9, build: 8, portability: 9 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['student', 'value', 'creative', 'everyday', 'budget'],
     prices: [
       { platform: 'amazon', price: 79999, affiliateUrl: 'https://www.amazon.in/HP-Pavilion-i5-1335U-14-inch-ew0116TU/dp/B0CWDBJ3Q8/ref=sr_1_4?sr=8-4', inStock: true },
@@ -413,7 +413,7 @@ const products = [
     display: '16 inch 3.2K OLED 120Hz', processor: 'AMD Ryzen 7 7745HX', os: 'Windows',
     weight: '1.88 kg', battery: '10 hours', features: ['Harman Kardon Audio', 'ASUS DialPad'],
     featured: false,
-    scores: { camera: 5, battery: 7, performance: 8, display: 10, value: 9, build: 8, portability: 7 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['creative', 'student', 'video-editing', 'value', 'everyday'],
     prices: [
       { platform: 'amazon', price: 74999, affiliateUrl: 'https://www.amazon.in/dp/asus-vivobook-16x', inStock: true },
@@ -426,7 +426,7 @@ const products = [
     display: '14 inch 2.8K IPS Anti-glare', processor: 'Intel Core Ultra 7 165U', os: 'Windows',
     weight: '1.12 kg', battery: '15 hours', features: ['Military Grade MIL-SPEC', 'Thunderbolt 4', 'TrackPoint'],
     featured: false,
-    scores: { camera: 6, battery: 9, performance: 8, display: 8, value: 6, build: 10, portability: 10 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['business', 'premium', 'lightweight', 'programming', 'durability'],
     prices: [
       { platform: 'amazon', price: 149999, affiliateUrl: 'https://www.amazon.in/dp/thinkpad-x1-carbon', inStock: true },
@@ -439,7 +439,7 @@ const products = [
     display: '15.6 inch FHD IPS 144Hz', processor: 'Intel Core i5-13420H + RTX 4050', os: 'Windows',
     weight: '2.2 kg', battery: '8 hours', features: ['Dual Fan Cooling', 'DTS:X Ultra Audio'],
     featured: false,
-    scores: { camera: 4, battery: 6, performance: 9, display: 7, value: 10, build: 7, portability: 6 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['gaming', 'budget', 'student', 'value', 'performance'],
     prices: [
       { platform: 'amazon', price: 64999, affiliateUrl: 'https://www.amazon.in/dp/acer-nitro-v15', inStock: true },
@@ -452,7 +452,7 @@ const products = [
     display: '16 inch QHD+ OLED 240Hz', processor: 'Intel Core Ultra 9 + RTX 4070', os: 'Windows',
     weight: '1.99 kg', battery: '10 hours', features: ['Thunderbolt 5', 'Per-Key RGB', 'Vapor Chamber'],
     featured: false,
-    scores: { camera: 5, battery: 7, performance: 10, display: 10, value: 7, build: 9, portability: 7 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['gaming', 'creative', 'premium', 'video-editing', 'performance'],
     prices: [
       { platform: 'amazon', price: 189999, affiliateUrl: 'https://www.amazon.in/dp/msi-stealth-16', inStock: true },
@@ -465,7 +465,7 @@ const products = [
     display: '14 inch 2.8K OLED Touch 120Hz', processor: 'Intel Core Ultra 7 155H', os: 'Windows',
     weight: '1.58 kg', battery: '17 hours', features: ['360° Hinge', 'Active Pen', 'Thunderbolt 4', 'Privacy Camera'],
     featured: false,
-    scores: { camera: 7, battery: 9, performance: 8, display: 10, value: 7, build: 10, portability: 9 },
+    scores: { reviewAnalysis: { trustScore: 84, verdict: 'Mostly Genuine', aiVerdict: 'Analysis shows consistent feedback.' } },
     tags: ['business', 'premium', 'creative', 'lightweight', '2-in-1'],
     prices: [
       { platform: 'amazon', price: 159999, affiliateUrl: 'https://www.amazon.in/dp/hp-spectre-x360', inStock: true },

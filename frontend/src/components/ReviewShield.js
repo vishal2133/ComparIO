@@ -92,17 +92,17 @@ export default function ReviewShield({ slug, prices }) {
                   }`}
                   style={{
                     background: platform === p.platform
-                      ? p.platform === 'amazon' ? 'rgba(251,191,36,0.15)' : 'rgba(59,130,246,0.15)'
+                      ? (p.platform === 'amazon' || p.platform === 'smartprix') ? 'rgba(251,191,36,0.15)' : 'rgba(59,130,246,0.15)'
                       : 'var(--bg)',
                     borderColor: platform === p.platform
-                      ? p.platform === 'amazon' ? 'rgba(251,191,36,0.4)' : 'rgba(59,130,246,0.4)'
+                      ? (p.platform === 'amazon' || p.platform === 'smartprix') ? 'rgba(251,191,36,0.4)' : 'rgba(59,130,246,0.4)'
                       : 'var(--border)',
                     color: platform === p.platform
-                      ? p.platform === 'amazon' ? '#fbbf24' : '#60a5fa'
+                      ? (p.platform === 'amazon' || p.platform === 'smartprix') ? '#fbbf24' : '#60a5fa'
                       : 'var(--text3)',
                   }}>
-                  {p.platform === 'amazon' ? '🛒' : '🛍️'}
-                  {p.platform.charAt(0).toUpperCase() + p.platform.slice(1)}
+                  {(p.platform === 'amazon' || p.platform === 'smartprix') ? '🛒' : '🛍️'}
+                  {p.platform === 'smartprix' ? 'Amazon' : p.platform.charAt(0).toUpperCase() + p.platform.slice(1)}
                 </button>
               ))}
             </div>
@@ -118,7 +118,7 @@ export default function ReviewShield({ slug, prices }) {
               className="w-full py-4 rounded-2xl font-black text-sm text-white transition-all hover:scale-[1.02] hover:shadow-lg flex items-center justify-center gap-2"
               style={{ background: 'linear-gradient(135deg, #d97706, #b45309)', boxShadow: '0 4px 16px rgba(217,119,6,0.25)' }}>
               <span>🔍</span>
-              Analyse {platform.charAt(0).toUpperCase() + platform.slice(1)} Reviews
+              Analyse {platform === 'smartprix' ? 'Amazon' : platform.charAt(0).toUpperCase() + platform.slice(1)} Reviews
               <span className="text-xs font-normal opacity-70">· ~30 seconds</span>
             </button>
 

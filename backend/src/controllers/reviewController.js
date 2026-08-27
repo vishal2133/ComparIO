@@ -1,6 +1,5 @@
 const axios = require('axios');
 const Product = require('../models/Product');
-const { scrapeAmazonReviews, scrapeFlipkartReviews } = require('../scrapers/reviews');
 
 // ── ANALYSIS HELPERS ──────────────────────────────────────────────────────────
 
@@ -165,10 +164,13 @@ Be direct, India-centric, and use simple language. No bullet points.`;
 };
 
 // ── MAIN CONTROLLER ───────────────────────────────────────────────────────────
+// Accepts reviews directly from the client (no scraper needed).
+// Request body: { slug, platform, reviews: [{ title, body, rating, verified, date }] }
+// If reviews are empty, falls back to cached analysis or returns an error.
 
 const analyseReviews = async (req, res) => {
   try {
-    const { slug, platform } = req.body;
+    const { slug, platform, reviews: clientReviews } = req.body;
 
     if (!slug) {
       return res.status(400).json({ success: false, message: 'slug required' });
@@ -179,66 +181,46 @@ const analyseReviews = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Product not found' });
     }
 
-    // Find the URL for the requested platform
-    const priceEntry = product.prices.find(p =>
-      platform ? p.platform === platform : true
-    );
-
-    if (!priceEntry || !priceEntry.affiliateUrl) {
-      return res.status(400).json({
-        success: false,
-        message: 'No product URL found for this platform',
-      });
-    }
-
-    // Check if we have a cached analysis less than 24 hours old
-    if (product.reviewAnalysis &&
-      product.reviewAnalysis.platform === priceEntry.platform &&
-      product.reviewAnalysis.analyzedAt &&
-      Date.now() - new Date(product.reviewAnalysis.analyzedAt).getTime() < 24 * 60 * 60 * 1000) {
+    // Return cached analysis if less than 24 hours old and platform matches
+    const cached = product.scores?.reviewAnalysis || product.reviewAnalysis;
+    if (
+      cached &&
+      cached.platform === (platform || cached.platform) &&
+      cached.analyzedAt &&
+      Date.now() - new Date(cached.analyzedAt).getTime() < 24 * 60 * 60 * 1000
+    ) {
       console.log('📋 Returning cached review analysis');
-      return res.json({
-        success: true,
-        cached: true,
-        data: product.reviewAnalysis,
-        productName: product.name,
-      });
+      return res.json({ success: true, cached: true, data: cached, productName: product.name });
     }
 
-    console.log(`\n🔍 Analysing reviews for ${product.name} on ${priceEntry.platform}`);
-
-    // Scrape reviews
-    let reviews = null;
-    if (priceEntry.platform === 'amazon') {
-      reviews = await scrapeAmazonReviews(priceEntry.affiliateUrl, 100);
-    } else if (priceEntry.platform === 'flipkart') {
-      reviews = await scrapeFlipkartReviews(priceEntry.affiliateUrl, 100);
-    }
-
-    if (!reviews || reviews.length === 0) {
+    // Need reviews from client
+    const reviews = clientReviews || [];
+    if (reviews.length === 0) {
       return res.status(400).json({
         success: false,
-        message: 'Could not fetch reviews. The product URL may be incorrect or the platform blocked access.',
+        message: 'No reviews provided. Please pass reviews in the request body.',
       });
     }
 
-    // Analyse patterns
+    console.log(`\n🔍 Analysing ${reviews.length} reviews for ${product.name} via Groq`);
+
+    // Pattern analysis
     const stats = analyseReviewPatterns(reviews);
     if (!stats) {
       return res.status(400).json({ success: false, message: 'Analysis failed' });
     }
 
-    // Get AI verdict
+    // Groq AI verdict
     const aiVerdict = await getAIVerdict(stats, product.name);
 
-    // Build verdict label
+    // Verdict label
     let verdict, verdictColor;
     if (stats.trustScore >= 75) { verdict = 'Mostly Genuine'; verdictColor = 'green'; }
     else if (stats.trustScore >= 50) { verdict = 'Mixed Signals'; verdictColor = 'amber'; }
     else { verdict = 'Suspicious Activity'; verdictColor = 'red'; }
 
     const analysis = {
-      platform: priceEntry.platform,
+      platform: platform || 'unknown',
       productName: product.name,
       trustScore: stats.trustScore,
       verdict,
@@ -268,12 +250,7 @@ const analyseReviews = async (req, res) => {
 
     console.log(`✅ Analysis complete — Trust Score: ${stats.trustScore}/100 (${verdict})`);
 
-    res.json({
-      success: true,
-      cached: false,
-      data: analysis,
-      productName: product.name,
-    });
+    res.json({ success: true, cached: false, data: analysis, productName: product.name });
 
   } catch (err) {
     console.error('Review analysis error:', err.message);

@@ -3,10 +3,11 @@ const Product = require('../models/Product');
 // GET /api/products
 const getAllProducts = async (req, res) => {
   try {
-    const { brand, featured } = req.query;
+    const { brand, featured, category } = req.query;
     const filter = {};
     if (brand) filter.brand = new RegExp(brand, 'i');
     if (featured) filter.featured = true;
+    if (category) filter.category = category.toLowerCase();
 
     const products = await Product.find(filter).select('-__v');
     res.json({ success: true, count: products.length, data: products });

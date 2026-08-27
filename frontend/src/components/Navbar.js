@@ -139,6 +139,11 @@ export default function Navbar() {
               style={{ color: 'var(--text2)' }}>
               🤖 Assistant
             </Link>
+            <Link href="/quiz"
+              className="text-sm font-black px-4 py-2 ml-1 rounded-xl transition-all"
+              style={{ background: 'var(--accent)', color: '#fff', boxShadow: '0 4px 12px rgba(37,99,235,0.3)' }}>
+              ✨ Take Quiz
+            </Link>
 
             {/* MORE DROPDOWN */}
             <div className="relative" ref={moreRef}>
@@ -190,6 +195,28 @@ export default function Navbar() {
                     <div>
                       <div className="text-sm font-bold" style={{ color: 'var(--text)' }}>Smart Assistant</div>
                       <div className="text-xs" style={{ color: 'var(--text3)' }}>AI-powered recommendations</div>
+                    </div>
+                  </Link>
+
+                  <Link href="/scraper" onClick={() => setMoreOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-blue-500/10 transition group">
+                    <div className="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
+                      ⚙️
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold" style={{ color: 'var(--text)' }}>Scraper Workspace</div>
+                      <div className="text-xs" style={{ color: 'var(--text3)' }}>Add and review phone specifications</div>
+                    </div>
+                  </Link>
+
+                  <Link href="/scoring" onClick={() => setMoreOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-violet-500/10 transition group">
+                    <div className="w-8 h-8 rounded-xl bg-violet-500/10 flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
+                      📊
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold" style={{ color: 'var(--text)' }}>Scoring Workspace</div>
+                      <div className="text-xs" style={{ color: 'var(--text3)' }}>Calculate and review phone scores</div>
                     </div>
                   </Link>
 
@@ -300,6 +327,7 @@ export default function Navbar() {
             {[
               { href: '/phones', icon: '📱', label: 'Phones' },
               { href: '/laptops', icon: '💻', label: 'Laptops' },
+              { href: '/quiz', icon: '✨', label: 'Take Quiz' },
               { href: '/assistant', icon: '🤖', label: 'Assistant' },
               { href: '/contact', icon: '✉️', label: 'Contact' },
               { href: '/about', icon: 'ℹ️', label: 'About' },

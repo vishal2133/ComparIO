@@ -3,9 +3,23 @@ import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
-const BRANDS = ['All', 'Apple', 'ASUS', 'Dell', 'Lenovo', 'HP', 'MSI', 'Acer', 'Samsung'];
-const OS_OPTIONS = ['All', 'Windows', 'macOS'];
+const BRANDS = ['All', 'Apple', 'ASUS', 'Dell', 'Lenovo', 'HP', 'MSI', 'Acer', 'Samsung', 'LG', 'Microsoft'];
+const OS_OPTIONS = ['All', 'Windows', 'macOS', 'Linux'];
 const USE_CASES = ['All', 'Gaming', 'Student', 'Business', 'Creative', 'Programming'];
+const BUDGET_RANGES = [
+  { label: 'All budgets', value: '' },
+  { label: 'Under ₹40K', value: '40000' },
+  { label: 'Under ₹70K', value: '70000' },
+  { label: 'Under ₹1L', value: '100000' },
+  { label: 'Under ₹1.5L', value: '150000' },
+];
+const SORT_OPTIONS = [
+  { label: 'Default', value: 'default' },
+  { label: 'Price: Low → High', value: 'price-asc' },
+  { label: 'Price: High → Low', value: 'price-desc' },
+  { label: 'Name: A–Z', value: 'name' },
+];
+const normalisePlatform = (p) => (!p || p === 'smartprix' ? 'amazon' : p);
 
 function LaptopsContent() {
   const searchParams = useSearchParams();
@@ -22,10 +36,11 @@ function LaptopsContent() {
     setLoading(true);
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products?category=laptop`)
       .then(r => r.json())
-      .then(d => { setLaptops(d.data || []); setLoading(false); });
+      .then(d => { setLaptops(d.data || []); setLoading(false); })
+      .catch(e => { console.warn('Backend unavailable, cannot fetch laptops:', e); setLoading(false); });
   }, []);
 
-  const getBest = (prices) => Math.min(...prices.map(p => p.price));
+  const getBest = (prices) => Math.min(...(prices || []).map(p => p.price).filter(Number.isFinite));
   const fmt = (p) => '₹' + p.toLocaleString('en-IN');
 
   const filtered = laptops
@@ -64,19 +79,17 @@ function LaptopsContent() {
             <input type="text" value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Search laptops..."
               className="t-input border t-border rounded-xl px-4 py-2.5 text-sm outline-none focus:border-violet-500/50 t-text placeholder-gray-600 col-span-2 md:col-span-1" />
-            <input type="number" value={budget} onChange={e => setBudget(e.target.value)}
-              placeholder="Max budget (₹)"
-              className="t-input border t-border rounded-xl px-4 py-2.5 text-sm outline-none focus:border-violet-500/50 t-text placeholder-gray-600" />
+            <select value={budget} onChange={e => setBudget(e.target.value)}
+              className="t-input border t-border rounded-xl px-4 py-2.5 text-sm outline-none t-text cursor-pointer">
+              {BUDGET_RANGES.map(b => <option key={b.value} value={b.value} className="bg-gray-900">{b.label}</option>)}
+            </select>
             <select value={activeOs} onChange={e => setActiveOs(e.target.value)}
               className="t-input border t-border rounded-xl px-4 py-2.5 text-sm outline-none t-text cursor-pointer">
               {OS_OPTIONS.map(o => <option key={o} value={o} className="bg-gray-900">{o === 'All' ? 'All OS' : o}</option>)}
             </select>
             <select value={sort} onChange={e => setSort(e.target.value)}
               className="t-input border t-border rounded-xl px-4 py-2.5 text-sm outline-none t-text cursor-pointer">
-              <option value="default" className="bg-gray-900">Sort: Default</option>
-              <option value="price-asc" className="bg-gray-900">Price: Low → High</option>
-              <option value="price-desc" className="bg-gray-900">Price: High → Low</option>
-              <option value="name" className="bg-gray-900">Name: A–Z</option>
+              {SORT_OPTIONS.map(s => <option key={s.value} value={s.value} className="bg-gray-900">{s.label}</option>)}
             </select>
           </div>
 
@@ -133,35 +146,44 @@ function LaptopsContent() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-            {filtered.map(p => {
-              const bp = getBest(p.prices);
-              const bplatform = p.prices.find(pr => pr.price === bp);
-              return (
-                <Link key={p._id} href={`/product/${p.slug}`}>
-                  <div className="group t-surface border t-border rounded-2xl p-5 hover:bg-white/[0.07] hover:border-violet-500/30 transition-all h-full flex flex-col hover:scale-[1.02]">
-                    <div className="t-input rounded-xl p-4 mb-4 flex items-center justify-center h-36">
-                      <img src={p.image} alt={p.name} className="h-full object-contain" />
-                    </div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs t-text2">{p.brand}</span>
-                      {p.os && <span className="text-xs t-input t-text2 px-2 py-0.5 rounded-full">{p.os}</span>}
-                    </div>
-                    <div className="font-black t-text text-sm leading-tight mb-1 flex-1">{p.name}</div>
-                    {p.processor && <div className="text-xs t-text2 mb-1 truncate">{p.processor}</div>}
-                    {p.ram && <div className="text-xs t-text2 mb-3">{p.ram} · {p.weight}</div>}
-                    <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                      <div>
-                        <div className="text-xs t-text2">Best price</div>
-                        <div className="text-lg font-black text-violet-400">{fmt(bp)}</div>
+              {filtered.map(p => {
+                const prices = (p.prices || []).filter(pr => Number.isFinite(pr.price) && pr.price > 0);
+                if (!prices.length) return null;
+                const bp = getBest(prices);
+                const bplatform = normalisePlatform(prices.find(pr => pr.price === bp)?.platform);
+                const procModel = p.processor?.model || p.parsedSpecs?.processor?.model || '';
+                const ramGb = p.memory?.ram;
+                const storageGb = p.memory?.storage;
+                return (
+                  <Link key={p._id} href={`/product/${p.slug}`}>
+                    <div className="group t-surface border t-border rounded-2xl p-5 hover:bg-white/[0.07] hover:border-violet-500/30 transition-all h-full flex flex-col hover:scale-[1.02]">
+                      <div className="t-input rounded-xl p-4 mb-4 flex items-center justify-center h-36">
+                        <img src={p.image} alt={p.name} className="h-full object-contain" />
                       </div>
-                      <span className={`text-xs font-bold px-2 py-1 rounded-lg capitalize ${bplatform?.platform === 'amazon' ? 'bg-amber-500/10 text-amber-400' : 'bg-blue-500/10 text-blue-400'}`}>
-                        {bplatform?.platform}
-                      </span>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs t-text2">{p.brand}</span>
+                        {p.os && <span className="text-xs t-input t-text2 px-2 py-0.5 rounded-full">{p.os}</span>}
+                      </div>
+                      <div className="font-black t-text text-sm leading-tight mb-1 flex-1">{p.name}</div>
+                      {procModel && <div className="text-xs t-text2 mb-1 truncate">{procModel}</div>}
+                      {(ramGb || storageGb) && (
+                        <div className="text-xs t-text2 mb-3">
+                          {ramGb ? `${ramGb}GB RAM` : ''}{ramGb && storageGb ? ' · ' : ''}{storageGb ? `${storageGb}GB` : ''}
+                        </div>
+                      )}
+                      <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                        <div>
+                          <div className="text-xs t-text2">Best price</div>
+                          <div className="text-lg font-black text-violet-400">{fmt(bp)}</div>
+                        </div>
+                        <span className={`text-xs font-bold px-2 py-1 rounded-lg capitalize ${bplatform === 'amazon' ? 'bg-amber-500/10 text-amber-400' : 'bg-blue-500/10 text-blue-400'}`}>
+                          {bplatform}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              );
-            })}
+                  </Link>
+                );
+              })}
           </div>
         )}
       </div>

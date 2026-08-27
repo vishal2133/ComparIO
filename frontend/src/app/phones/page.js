@@ -33,7 +33,8 @@ function PhonesContent() {
     setLoading(true);
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products?category=phone`)
       .then(r => r.json())
-      .then(d => { setPhones(d.data || []); setLoading(false); });
+      .then(d => { setPhones(d.data || []); setLoading(false); })
+      .catch(e => { console.warn('Backend unavailable, cannot fetch phones:', e); setLoading(false); });
   }, []);
 
   const getBest = (prices) => Math.min(...prices.map(p => p.price));
@@ -156,8 +157,8 @@ function PhonesContent() {
                         <div className="text-[10px] t-text3">Best price</div>
                         <div className="text-base font-black text-blue-400">{fmt(bp)}</div>
                       </div>
-                      <span className={`text-[10px] font-bold px-2 py-1 rounded-lg capitalize ${bplatform?.platform === 'amazon' ? 'bg-amber-500/10 text-amber-400' : 'bg-blue-500/10 text-blue-300'}`}>
-                        {bplatform?.platform}
+                      <span className={`text-[10px] font-bold px-2 py-1 rounded-lg capitalize ${(bplatform?.platform === 'amazon' || bplatform?.platform === 'smartprix') ? 'bg-amber-500/10 text-amber-400' : 'bg-blue-500/10 text-blue-300'}`}>
+                        {bplatform?.platform === 'smartprix' ? 'amazon' : bplatform?.platform}
                       </span>
                     </div>
                   </div>

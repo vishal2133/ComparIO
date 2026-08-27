@@ -205,7 +205,8 @@ export default function Home() {
     setMounted(true);
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products?featured=true`)
       .then(r => r.json())
-      .then(d => setFeatured(d.data || []));
+      .then(d => setFeatured(d.data || []))
+      .catch(e => console.warn('Backend unavailable, cannot fetch featured products:', e));
 
     const handleClick = (e) => {
       if (searchRef.current && !searchRef.current.contains(e.target)) setSearchOpen(false);

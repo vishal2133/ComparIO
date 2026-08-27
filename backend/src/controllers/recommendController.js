@@ -1,4 +1,18 @@
 const Product = require('../models/Product');
+const { getRecommendations: getSmartRecommendationsForAnswers } = require('../scoring-engine');
+
+const getSmartRecommendations = async (req, res) => {
+  try {
+    const result = await getSmartRecommendationsForAnswers(req.body || {}, Product);
+    if (!result.total_matches) {
+      return res.status(404).json({ success: false, error: 'No phones match', suggestions: ['Try a wider budget', 'Remove one dealbreaker', 'Choose any brand'] });
+    }
+    return res.json({ success: true, ...result });
+  } catch (error) {
+    console.error('Smart recommend error:', error.message);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
 
 const getRecommendations = async (req, res) => {
   try {
@@ -156,4 +170,4 @@ Be direct. Use Indian context. No bullet points.`;
   }
 };
 
-module.exports = { getRecommendations };
+module.exports = { getRecommendations, getSmartRecommendations };

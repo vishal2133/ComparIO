@@ -43,7 +43,7 @@ export default function PriceHistoryChart({ slug, currentPrices }) {
                 textAlign: 'center',
               }}>
                 <div style={{ fontSize: '11px', color: 'var(--text3)', textTransform: 'capitalize', marginBottom: '4px' }}>
-                  {p.platform} today
+                  {p.platform === 'smartprix' ? 'amazon' : p.platform} today
                 </div>
                 <div style={{ fontSize: '18px', fontWeight: 900, color: colors[p.platform] || 'var(--text)' }}>
                   {formatPrice(p.price)}
@@ -71,7 +71,7 @@ export default function PriceHistoryChart({ slug, currentPrices }) {
   const getY = (price) =>
     chartHeight - padding - ((price - minPrice) / priceRange) * (chartHeight - padding * 2);
 
-  const amazonHistory = history.filter((h) => h.platform === 'amazon');
+  const amazonHistory = history.filter((h) => h.platform === 'amazon' || h.platform === 'smartprix');
   const flipkartHistory = history.filter((h) => h.platform === 'flipkart');
 
   const buildPath = (data) => {
